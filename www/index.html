@@ -1,33 +1,14 @@
 <!DOCTYPE html>
-<!--
-    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta charset="utf-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
     <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />-->
     <!-- Good default declaration:
     * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
     * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
@@ -38,23 +19,132 @@
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <title>Hello World</title>
+    <title>DietaryZ</title>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 
 <body>
-    <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
+<div data-role="page" id="index">
+    <div data-role="panel" id="index-menu">
+        <h1>DietaryZ</h1>
+        <ul data-role="listview">
+            <li data-icon="false"><a href="#index">All activity</a></li>
+            <li data-icon="false"><a href="#add-activity">Add activity</a></li>
+        </ul>
+    </div>
+    <div data-role="header" data-position="fixed">
+        <a href="#index-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
+        <h1>DietaryZ</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <form class="ui-filterable">
+            <input id="myFilter" data-type="search" placeholder="Search by name ..." />
+        </form>
+        <ul data-role="listview" id="list-activities" data-filter="true" data-input="#myFilter">
+        </ul>
+        <div data-role="popup" id="activityPopup">
+            <div data-role="header">
+                <a class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
+                <h1>Options</h1>
+            </div>
+            <div data-role="main" class="ui-content">
+                <a class="ui-btn ui-icon-delete ui-btn-icon-left ui-btn-inline" onclick="deleteActivity()">Delete</a>
+                <a class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-inline" data-rel="dialog" href="#update-activity">Update</a>
+                <a class="ui-btn ui-icon-info ui-btn-icon-left" data-rel="dialog" href="#reports">View report</a>
+                <a class="ui-btn ui-icon-plus ui-btn-icon-left" data-rel="dialog" href="#add-report">Add report</a>
+            </div>
         </div>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript">
-        app.initialize();
-    </script>
+</div>
+
+<div data-role="page" id="add-activity">
+    <div data-role="panel" id="add-activity-menu">
+        <h1>DietaryZ</h1>
+        <ul data-role="listview">
+            <li data-icon="false"><a href="#index">All activity</a></li>
+            <li data-icon="false"><a href="#add-activity">Add activity</a></li>
+        </ul>
+    </div>
+    <div data-role="header" data-position="fixed">
+        <a href="#add-activity-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
+        <h1>Add activity</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <form id="add-activity-form">
+            <div class="ui-field-contain">
+                <label for="txtName">Name: </label>
+                <input type="text" id="txtName" data-clear-btn="true"/>
+                <label for="txtLocation">Location: </label>
+                <input type="text" id="txtLocation" data-clear-btn="true"/>
+                <label for="txtDate">Date: </label>
+                <input type="date" id="txtDate" data-clear-btn="true"/>
+                <label for="txtTime">Time: </label>
+                <input type="time" id="txtTime" data-clear-btn="true"/>
+                <label for="txtReporter">Reporter: </label>
+                <input type="text" id="txtReporter" data-clear-btn="true"/>
+                <label for="btnAdd"></label>
+                <a href="" class="ui-btn ui-icon-plus ui-btn-icon-left" id="btnAdd" onclick="addActivity()">Add</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div data-role="dialog" data-dialog="true" id="update-activity">
+    <div data-role="header">
+        <h1>Update Activity</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <form id="update-activity-form">
+            <div class="ui-field-contain">
+                <label for="txtNameUpdate">Name: </label>
+                <input type="text" id="txtNameUpdate" data-clear-btn="true"/>
+                <label for="txtLocationUpdate">Location: </label>
+                <input type="text" id="txtLocationUpdate" data-clear-btn="true"/>
+                <label for="txtDateUpdate">Date: </label>
+                <input type="date" id="txtDateUpdate" data-clear-btn="true"/>
+                <label for="txtTimeUpdate">Time: </label>
+                <input type="time" id="txtTimeUpdate" data-clear-btn="true"/>
+                <label for="txtReporterUpdate">Reporter: </label>
+                <input type="text" id="txtReporterUpdate" data-clear-btn="true"/>
+                <label for="btnUpdate"></label>
+                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnUpdate" onclick="updateActivity()">Update</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div data-role="dialog" data-dialog="true" id="add-report">
+    <div data-role="header">
+        <h1>Add report</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <form>
+            <div class="ui-field-contain">
+                <label for="txtContent">Content</label>
+                <textarea id="txtContent" data-clear-btn="true"></textarea>
+                <label for="btnAddReport"></label>
+                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnAddReport" onclick="addReport()">Add</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div data-role="dialog" data-dialog="true" id="reports">
+    <div data-role="header">
+        <h1>Reports</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <ul data-role="listview" id="list-reports">
+
+        </ul>
+    </div>
+</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/database_handler.js"></script>
+<script type="text/javascript" src="js/activity_handler.js"></script>
+<script type="text/javascript" src="js/report_handler.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>
