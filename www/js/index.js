@@ -1,9 +1,14 @@
-var currentActivity = {
+var food_groups = ["Dairy", "Fruits", "Meat", "Bread"];
+var meal_types = ["Breakfast", "Lunch", "Dinner"];
+
+var currentFood = {
     id: -1,
     name: "",
-    location: "",
+    group: "",
     date: "",
     time: "",
+    type: "",
+    note: "",
     reporter: ""
 };
 
@@ -12,7 +17,23 @@ $(document).on("pagebeforecreate", function () {
 });
 
 $(document).on("pagebeforeshow", "#index", function () {
-    activityHandler.readAll(displayActivities);
+    foodHandler.readAll(displayFoods);
+});
+
+$(document).on("pagebeforeshow", "#add-food", function () {
+    $.each(food_groups, function (idx, v) {
+        $("#txtGroup").append($("<option>", {
+            value: v.toLowerCase(),
+            text: v
+        }));
+    });
+
+    $.each(meal_types, function (idx, v) {
+        $("#txtType").append($("<option>", {
+            value: v.toLowerCase(),
+            text: v
+        }));
+    });
 });
 
 $(document).on("pagebeforeshow", "#update-activity", function () {
@@ -27,24 +48,24 @@ $(document).on("pagebeforeshow", "#reports", function () {
     reportHandler.getByAid(currentActivity.id, displayReports);
 });
 
-function displayActivities(activities) {
-    var listActivities = $("#list-activities");
-    listActivities.empty();
-    for (var i = 0; i < activities.length; i++) {
-        var activity = activities[i];
-        var li = $("<li />").attr("data-filtertext", activity.name);
-        var a = $("<a />").addClass("ui-activity").attr("id", activity.id);
+function displayFoods(foods) {
+    var listFoods = $("#list-foods");
+    listFoods.empty();
+
+    $.each(foods, function (index, food) {
+        var li = $("<li />").attr("data-filtertext", food.name);
+        var a = $("<a />").addClass("ui-food").attr("id", food.id);
         var txtName = $("<h3 />").text("Name: ");
-        var txtLocation = $("<p />").text("Location: ");
+        var txtLocation = $("<p />").text("Group: ");
         var txtDate = $("<p />").text("Date: ");
         var txtTime = $("<p />").text("Time: ");
         var txtReporter = $("<p />").text("Reporter: ");
 
-        txtName.append($("<span />").attr("name", "name").text(activity.name));
-        txtLocation.append($("<span />").attr("name", "location").text(activity.location));
-        txtDate.append($("<span />").attr("name", "date").text(activity.date));
-        txtTime.append($("<span />").attr("name", "time").text(activity.time));
-        txtReporter.append($("<span />").attr("name", "reporter").text(activity.reporter));
+        txtName.append($("<span />").attr("name", "name").text(food.name));
+        txtLocation.append($("<span />").attr("name", "group").text(food.group));
+        txtDate.append($("<span />").attr("name", "date").text(food.date));
+        txtTime.append($("<span />").attr("name", "time").text(food.time));
+        txtReporter.append($("<span />").attr("name", "reporter").text(food.reporter));
 
         a.append(txtName);
         a.append(txtLocation);
@@ -52,67 +73,70 @@ function displayActivities(activities) {
         a.append(txtTime);
         a.append(txtReporter);
         li.append(a);
-        listActivities.append(li);
-    }
+        listFoods.append(li);
+    });
 
-    listActivities.listview("refresh");
+    listFoods.listview("refresh");
 
-    listActivities.on("taphold", "li", function () {
-        currentActivity.id = $(this).find("a.ui-activity").attr("id");
-        currentActivity.name = $(this).find("[name='name']").text();
-        currentActivity.location = $(this).find("[name='location']").text();
-        currentActivity.date = $(this).find("[name='date']").text();
-        currentActivity.time = $(this).find("[name='time']").text();
-        currentActivity.reporter = $(this).find("[name='reporter']").text();
+    listFoods.on("taphold", "li", function () {
+        currentFood.id = $(this).find("a.ui-food").attr("id");
+        currentFood.name = $(this).find("[name='name']").text();
+        currentFood.group = $(this).find("[name='group']").text();
+        currentFood.date = $(this).find("[name='date']").text();
+        currentFood.time = $(this).find("[name='time']").text();
+        currentFood.reporter = $(this).find("[name='reporter']").text();
 
-        $('#activityPopup').popup("open");
+        $('#foodPopup').popup("open");
     });
 }
 
-function addActivity() {
+function addFood() {
     var txtName = $("#txtName");
-    var txtLocation = $("#txtLocation");
+    var txtGroup = $("#txtGroup");
     var txtDate = $("#txtDate");
     var txtTime = $("#txtTime");
+    var txtType = $("#txtType");
+    var txtNote = $("#txtNote");
     var txtReporter = $("#txtReporter");
 
-    var activity = {
+    var food = {
         name: txtName.val(),
-        location: txtLocation.val(),
+        group: txtGroup.val(),
         date: txtDate.val(),
         time: txtTime.val(),
+        type: txtType.val(),
+        note: txtNote.val(),
         reporter: txtReporter.val()
     };
 
-    validateActivity(activity, function (error) {
-        if (error === "") {
-            activityHandler.checkDuplicate(activity, function (results) {
-                if (results.rows.length !== 0) {
+    validateFood(food, function (errMsg) {
+        if (errMsg === "") {
+            foodHandler.checkDuplicate(food, function (result) {
+                if (result.rows.length !== 0) {
                     alert("Event duplicated!");
                 } else {
-                    activityHandler.create(
-                        activity,
-                        function () {
-                            txtName.val("");
-                            txtLocation.val("");
-                            txtDate.val("");
-                            txtTime.val("");
-                            txtReporter.val("");
-                            changePage("#index");
-                        });
+                    foodHandler.create(food, function () {
+                        txtName.val("");
+                        txtGroup.val("");
+                        txtDate.val("");
+                        txtTime.val("");
+                        txtType.val("");
+                        txtNote.val("");
+                        txtReporter.val("");
+                        changePage("#index");
+                    });
                 }
             });
         } else {
-            alert(error);
+            alert(errMsg);
         }
     });
-
 }
 
-function deleteActivity() {
-    var r = confirm("Delete activity\nName: " + currentActivity.name);
+function deleteFood() {
+    var r = confirm("Delete food\nName: " + currentFood.name);
     if (r) {
-        activityHandler.delete(currentActivity.id, function () {
+        foodHandler.delete(currentFood.id, function () {
             changePage("#index");
         });
     }
@@ -158,10 +182,10 @@ function displayReports(reports) {
     listReports.empty();
 
     for (var i = 0; i < reports.length; i++) {
-        var report = reports[i]
+        var report = reports[i];
         var li = $("<li data-icon='false' />");
         var a = $("<a />").attr("id", report.aid);
-        var content = $("<p />").text(report.content)
+        var content = $("<p />").text(report.content);
 
         a.append(content);
         li.append(a);
@@ -185,13 +209,22 @@ function addReport() {
     )
 }
 
-function validateActivity(activity, callback) {
+function validateFood(food, callback) {
     var errors = [];
-    if (activity.name === "") {
+    if (food.name === "") {
         errors.push("Name required.\n");
     }
-    if (activity.date === "") {
+    if (food.group === "") {
+        errors.push("Group required.\n");
+    }
+    if (food.date === "") {
         errors.push("Date required.\n");
+    }
+    if (food.time === "") {
+        errors.push("Time required.\n");
+    }
+    if (food.reporter === "") {
+        errors.push("Reporter required.\n");
     }
 
     var msg = "";

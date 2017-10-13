@@ -2,11 +2,11 @@ var databaseHandler;
 databaseHandler = {
     db: null,
     createDatabase: function () {
-        if (this.db == null) {
+        if (this.db === null) {
             this.db = window.openDatabase(
-                "iDiscovery.db",
+                "DietaryZ.db",
                 "1.0",
-                "iDiscovery database",
+                "DietaryZ database",
                 1000000,
                 function (err) {
                     console.log("Failed to create database. " + err);
@@ -15,29 +15,28 @@ databaseHandler = {
             this.db.transaction(
                 function (tx) {
                     tx.executeSql(
-                        "CREATE TABLE IF NOT EXISTS activities(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, location TEXT, date TEXT, time TEXT, reporter TEXT)",
+                        "CREATE TABLE IF NOT EXISTS foods(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, fgroup TEXT, date TEXT, time TEXT, mtype TEXT, note TEXT, reporter TEXT)",
                         [],
                         function () {
-                            console.log("Successfully create table activities.");
+                            console.log("Successfully create table foods.");
                         },
                         onExecuteError
                     );
-                },
-                onTransactionError
+                }, onTransactionError
             );
-            this.db.transaction(
-                function (tx) {
-                    tx.executeSql(
-                        "CREATE TABLE IF NOT EXISTS reports(id INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, content TEXT)",
-                        [],
-                        function () {
-                            console.log("Successfully create table reports.");
-                        },
-                        onExecuteError
-                    )
-                },
-                onTransactionError
-            )
+            /*            this.db.transaction(
+                            function (tx) {
+                                tx.executeSql(
+                                    "CREATE TABLE IF NOT EXISTS reports(id INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, content TEXT)",
+                                    [],
+                                    function () {
+                                        console.log("Successfully create table reports.");
+                                    },
+                                    onExecuteError
+                                )
+                            },
+                            onTransactionError
+                        )*/
         }
     }
 };

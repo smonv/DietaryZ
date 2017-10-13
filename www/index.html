@@ -30,8 +30,8 @@
     <div data-role="panel" id="index-menu">
         <h1>DietaryZ</h1>
         <ul data-role="listview">
-            <li data-icon="false"><a href="#index">All activity</a></li>
-            <li data-icon="false"><a href="#add-activity">Add activity</a></li>
+            <li data-icon="false"><a href="#index">All food</a></li>
+            <li data-icon="false"><a href="#add-food">Add food</a></li>
         </ul>
     </div>
     <div data-role="header" data-position="fixed">
@@ -40,18 +40,18 @@
     </div>
     <div data-role="main" class="ui-content">
         <form class="ui-filterable">
-            <input id="myFilter" data-type="search" placeholder="Search by name ..." />
+            <input id="myFilter" data-type="search" placeholder="Search by name ..."/>
         </form>
-        <ul data-role="listview" id="list-activities" data-filter="true" data-input="#myFilter">
+        <ul data-role="listview" id="list-foods" data-filter="true" data-input="#myFilter">
         </ul>
-        <div data-role="popup" id="activityPopup">
+        <div data-role="popup" id="foodPopup">
             <div data-role="header">
                 <a class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
                 <h1>Options</h1>
             </div>
             <div data-role="main" class="ui-content">
-                <a class="ui-btn ui-icon-delete ui-btn-icon-left ui-btn-inline" onclick="deleteActivity()">Delete</a>
-                <a class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-inline" data-rel="dialog" href="#update-activity">Update</a>
+                <a class="ui-btn ui-icon-delete ui-btn-icon-left ui-btn-inline" onclick="deleteFood()">Delete</a>
+                <a class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-inline" data-rel="dialog" href="#update-food">Update</a>
                 <a class="ui-btn ui-icon-info ui-btn-icon-left" data-rel="dialog" href="#reports">View report</a>
                 <a class="ui-btn ui-icon-plus ui-btn-icon-left" data-rel="dialog" href="#add-report">Add report</a>
             </div>
@@ -59,33 +59,41 @@
     </div>
 </div>
 
-<div data-role="page" id="add-activity">
+<div data-role="page" id="add-food">
     <div data-role="panel" id="add-activity-menu">
         <h1>DietaryZ</h1>
         <ul data-role="listview">
-            <li data-icon="false"><a href="#index">All activity</a></li>
-            <li data-icon="false"><a href="#add-activity">Add activity</a></li>
+            <li data-icon="false"><a href="#index">All food</a></li>
+            <li data-icon="false"><a href="#add-food">Add food</a></li>
         </ul>
     </div>
     <div data-role="header" data-position="fixed">
         <a href="#add-activity-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
-        <h1>Add activity</h1>
+        <h1>Add food</h1>
     </div>
     <div data-role="main" class="ui-content">
         <form id="add-activity-form">
             <div class="ui-field-contain">
                 <label for="txtName">Name: </label>
                 <input type="text" id="txtName" data-clear-btn="true"/>
-                <label for="txtLocation">Location: </label>
-                <input type="text" id="txtLocation" data-clear-btn="true"/>
+                <label for="txtGroup">Group: </label>
+                <select id="txtGroup" data-clear-btn="true">
+                    <option value="">Please choose</option>
+                </select>
                 <label for="txtDate">Date: </label>
                 <input type="date" id="txtDate" data-clear-btn="true"/>
                 <label for="txtTime">Time: </label>
                 <input type="time" id="txtTime" data-clear-btn="true"/>
+                <label for="txtType">Meal Type: </label>
+                <select id="txtType" data-clear-btn="true">
+                    <option value="">Please choose</option>
+                </select>
+                <label for="txtNote">Note: </label>
+                <textarea id="txtNote"></textarea>
                 <label for="txtReporter">Reporter: </label>
                 <input type="text" id="txtReporter" data-clear-btn="true"/>
                 <label for="btnAdd"></label>
-                <a href="" class="ui-btn ui-icon-plus ui-btn-icon-left" id="btnAdd" onclick="addActivity()">Add</a>
+                <a href="" class="ui-btn ui-icon-plus ui-btn-icon-left" id="btnAdd" onclick="addFood()">Add</a>
             </div>
         </form>
     </div>
@@ -108,7 +116,8 @@
                 <label for="txtReporterUpdate">Reporter: </label>
                 <input type="text" id="txtReporterUpdate" data-clear-btn="true"/>
                 <label for="btnUpdate"></label>
-                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnUpdate" onclick="updateActivity()">Update</a>
+                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnUpdate"
+                   onclick="updateActivity()">Update</a>
             </div>
         </form>
     </div>
@@ -142,7 +151,7 @@
 </div>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/database_handler.js"></script>
-<script type="text/javascript" src="js/activity_handler.js"></script>
+<script type="text/javascript" src="js/food_handler.js"></script>
 <script type="text/javascript" src="js/report_handler.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 </body>
