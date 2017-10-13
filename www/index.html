@@ -60,7 +60,7 @@
 </div>
 
 <div data-role="page" id="add-food">
-    <div data-role="panel" id="add-activity-menu">
+    <div data-role="panel" id="add-food-menu">
         <h1>DietaryZ</h1>
         <ul data-role="listview">
             <li data-icon="false"><a href="#index">All food</a></li>
@@ -68,7 +68,7 @@
         </ul>
     </div>
     <div data-role="header" data-position="fixed">
-        <a href="#add-activity-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
+        <a href="#add-food-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
         <h1>Add food</h1>
     </div>
     <div data-role="main" class="ui-content">
@@ -89,7 +89,7 @@
                     <option value="">Please choose</option>
                 </select>
                 <label for="txtNote">Note: </label>
-                <textarea id="txtNote"></textarea>
+                <textarea id="txtNote" rows="4"></textarea>
                 <label for="txtReporter">Reporter: </label>
                 <input type="text" id="txtReporter" data-clear-btn="true"/>
                 <label for="btnAdd"></label>
@@ -98,26 +98,34 @@
         </form>
     </div>
 </div>
-<div data-role="dialog" data-dialog="true" id="update-activity">
+<div data-role="dialog" data-dialog="true" id="update-food">
     <div data-role="header">
-        <h1>Update Activity</h1>
+        <h1>Update Food</h1>
     </div>
     <div data-role="main" class="ui-content">
-        <form id="update-activity-form">
+        <form id="update-food-form">
             <div class="ui-field-contain">
                 <label for="txtNameUpdate">Name: </label>
                 <input type="text" id="txtNameUpdate" data-clear-btn="true"/>
-                <label for="txtLocationUpdate">Location: </label>
-                <input type="text" id="txtLocationUpdate" data-clear-btn="true"/>
+                <label for="txtGroupUpdate">Group: </label>
+                <select id="txtGroupUpdate" data-clear-btn="true">
+                    <option value="">Please choose</option>
+                </select>
                 <label for="txtDateUpdate">Date: </label>
                 <input type="date" id="txtDateUpdate" data-clear-btn="true"/>
                 <label for="txtTimeUpdate">Time: </label>
                 <input type="time" id="txtTimeUpdate" data-clear-btn="true"/>
+                <label for="txtTypeUpdate">Type: </label>
+                <select id="txtTypeUpdate" data-clear-btn="true">
+                    <option value="">Please choose</option>
+                </select>
+                <label for="txtNoteUpdate">Note: </label>
+                <textarea id="txtNoteUpdate" rows="4"></textarea>
                 <label for="txtReporterUpdate">Reporter: </label>
                 <input type="text" id="txtReporterUpdate" data-clear-btn="true"/>
                 <label for="btnUpdate"></label>
                 <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnUpdate"
-                   onclick="updateActivity()">Update</a>
+                   onclick="updateFood()">Update</a>
             </div>
         </form>
     </div>

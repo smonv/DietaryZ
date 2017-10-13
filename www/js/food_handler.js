@@ -40,10 +40,22 @@ var foodHandler = {
                 );
             },
             onTransactionError
-        )
+        );
     },
     update: function (food, callback) {
-
+        databaseHandler.db.transaction(
+            function (tx) {
+                tx.executeSql(
+                    "UPDATE foods SET name = ?, fgroup = ?, date = ?, time = ?, mtype = ?, note = ?, reporter = ? WHERE id = ?",
+                    [food.name, food.group, food.date, food.time, food.type, food.note, food.reporter, food.id],
+                    function () {
+                        callback();
+                    },
+                    onExecuteError
+                );
+            },
+            onTransactionError
+        );
     },
     delete: function (id, callback) {
         databaseHandler.db.transaction(
@@ -58,6 +70,6 @@ var foodHandler = {
                 );
             },
             onTransactionError
-        )
+        );
     }
 };

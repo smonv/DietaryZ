@@ -36,12 +36,29 @@ $(document).on("pagebeforeshow", "#add-food", function () {
     });
 });
 
-$(document).on("pagebeforeshow", "#update-activity", function () {
-    $("#txtNameUpdate").val(currentActivity.name);
-    $("#txtLocationUpdate").val(currentActivity.location);
-    $("#txtDateUpdate").val(currentActivity.date);
-    $("#txtTimeUpdate").val(currentActivity.time);
-    $("#txtReporterUpdate").val(currentActivity.reporter);
+$(document).on("pagebeforeshow", "#update-food", function () {
+    $.each(food_groups, function (idx, v) {
+        $("#txtGroupUpdate").append($("<option>", {
+            value: v.toLowerCase(),
+            text: v
+        }));
+    });
+
+    $.each(meal_types, function (idx, v) {
+        $("#txtTypeUpdate").append($("<option>", {
+            value: v.toLowerCase(),
+            text: v
+        }));
+    });
+
+    $("#txtNameUpdate").val(currentFood.name);
+    $("#txtGroupUpdate").val(currentFood.group).prop('selected', true);
+    $("#txtDateUpdate").val(currentFood.date);
+    $("#txtTimeUpdate").val(currentFood.time);
+    $("#txtTypeUpdate").val(currentFood.type).prop('selected', true);
+    $("#txtDateUpdate").val(currentFood.date);
+    $("#txtNoteUpdate").val(currentFood.note);
+    $("#txtReporterUpdate").val(currentFood.reporter);
 });
 
 $(document).on("pagebeforeshow", "#reports", function () {
@@ -52,27 +69,33 @@ function displayFoods(foods) {
     var listFoods = $("#list-foods");
     listFoods.empty();
 
+    console.log(foods);
     $.each(foods, function (index, food) {
+        console.log(food);
         var li = $("<li />").attr("data-filtertext", food.name);
         var a = $("<a />").addClass("ui-food").attr("id", food.id);
+
         var txtName = $("<h3 />").text("Name: ");
-        var txtLocation = $("<p />").text("Group: ");
-        var txtDate = $("<p />").text("Date: ");
-        var txtTime = $("<p />").text("Time: ");
+        var txtGroup = $("<p />").text("Group: ");
+        var txtDateTime = $("<p />").text("DateTime: ");
+        var txtType = $("<p />").text("Meal Type: ");
+        var txtNote = $("<p />").text(food.note).hide();
         var txtReporter = $("<p />").text("Reporter: ");
 
         txtName.append($("<span />").attr("name", "name").text(food.name));
-        txtLocation.append($("<span />").attr("name", "group").text(food.group));
-        txtDate.append($("<span />").attr("name", "date").text(food.date));
-        txtTime.append($("<span />").attr("name", "time").text(food.time));
+        txtGroup.append($("<span />").attr("name", "group").text(food.fgroup));
+        txtDateTime.append($("<span />").attr("name", "datetime").text(food.date + " " + food.time));
+        txtType.append($("<span />").attr("name", "type").text(food.mtype));
         txtReporter.append($("<span />").attr("name", "reporter").text(food.reporter));
 
         a.append(txtName);
-        a.append(txtLocation);
-        a.append(txtDate);
-        a.append(txtTime);
+        a.append(txtGroup);
+        a.append(txtDateTime);
+        a.append(txtType);
+        a.append(txtNote);
         a.append(txtReporter);
         li.append(a);
+
         listFoods.append(li);
     });
 
@@ -82,8 +105,11 @@ function displayFoods(foods) {
         currentFood.id = $(this).find("a.ui-food").attr("id");
         currentFood.name = $(this).find("[name='name']").text();
         currentFood.group = $(this).find("[name='group']").text();
-        currentFood.date = $(this).find("[name='date']").text();
-        currentFood.time = $(this).find("[name='time']").text();
+        datetime = $(this).find("[name='datetime']").text().split(' ');
+        currentFood.date = datetime[0];
+        currentFood.time = datetime[1];
+        currentFood.type = $(this).find("[name='type']").text();
+        currentFood.note = $(this).find("[name='note']").text();
         currentFood.reporter = $(this).find("[name='reporter']").text();
 
         $('#foodPopup').popup("open");
@@ -142,37 +168,39 @@ function deleteFood() {
     }
 }
 
-function updateActivity() {
+function updateFood() {
     var name = $("#txtNameUpdate").val();
-    var location = $("#txtLocationUpdate").val();
+    var group = $("#txtGroupUpdate").val();
     var date = $("#txtDateUpdate").val();
     var time = $("#txtTimeUpdate").val();
+    var type = $("#txtTypeUpdate").val();
+    var note = $("#txtNoteUpdate").val();
     var reporter = $("#txtReporterUpdate").val();
 
-    var activity = {
-        id: currentActivity.id,
+    var food = {
+        id: currentFood.id,
         name: name,
-        location: location,
+        group: group,
         date: date,
         time: time,
+        type: type,
+        note: note,
         reporter: reporter
     };
 
-    validateActivity(activity, function (error) {
-        if (error !== "") {
-            alert(error);
-        } else {
-            activityHandler.checkDuplicate(activity, function (results) {
-                if (results.rows.length !== 0) {
+    validateFood(food, function (errMsg) {
+        if (errMsg === "") {
+            foodHandler.checkDuplicate(food, function (result) {
+                if (result.rows.length !== 0) {
                     alert("Event duplicated!");
                 } else {
-                    activityHandler.update(
-                        activity,
-                        function () {
-                            changePage("#index");
-                        });
+                    foodHandler.update(food, function () {
+                        changePage("#index");
+                    });
                 }
             });
+        } else {
+            alert(errMsg);
         }
     });
 }
