@@ -142,7 +142,7 @@ function addFood() {
         if (errMsg === "") {
             foodHandler.checkDuplicate(food, function (result) {
                 if (result.rows.length !== 0) {
-                    alert("Event duplicated!");
+                    navigator.notification.alert("Event duplicated!", null, "Error");
                 } else {
                     foodHandler.create(food, function () {
                         txtName.val("");
@@ -157,7 +157,7 @@ function addFood() {
                 }
             });
         } else {
-            alert(errMsg);
+            navigator.notification.alert(errMsg, null, "Error");
         }
     });
 }
