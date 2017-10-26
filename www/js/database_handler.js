@@ -24,19 +24,6 @@ databaseHandler = {
                     );
                 }, onTransactionError
             );
-            /*            this.db.transaction(
-                            function (tx) {
-                                tx.executeSql(
-                                    "CREATE TABLE IF NOT EXISTS reports(id INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, content TEXT)",
-                                    [],
-                                    function () {
-                                        console.log("Successfully create table reports.");
-                                    },
-                                    onExecuteError
-                                )
-                            },
-                            onTransactionError
-                        )*/
         }
     }
 };

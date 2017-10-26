@@ -36,7 +36,7 @@ $(document).on("pagebeforeshow", "#add-food", function () {
     });
 });
 
-$(document).on("pagebeforeshow", "#update-food", function () {
+$(document).on("pagebeforeshow", "#update-food", function (e, ui) {
     $.each(food_groups, function (idx, v) {
         $("#txtGroupUpdate").append($("<option>", {
             value: v.toLowerCase(),
@@ -61,17 +61,20 @@ $(document).on("pagebeforeshow", "#update-food", function () {
     $("#txtReporterUpdate").val(currentFood.reporter);
 });
 
-$(document).on("pagebeforeshow", "#reports", function () {
-    reportHandler.getByAid(currentActivity.id, displayReports);
+$(document).on("pagebeforeshow", "#add-note", function () {
+    console.log(currentFood);
+    $('#txtContent').val(currentFood.note);
+});
+
+$(document).on("pagebeforeshow", "#note", function () {
+    displayNote();
 });
 
 function displayFoods(foods) {
     var listFoods = $("#list-foods");
     listFoods.empty();
 
-    console.log(foods);
     $.each(foods, function (index, food) {
-        console.log(food);
         var li = $("<li />").attr("data-filtertext", food.name);
         var a = $("<a />").addClass("ui-food").attr("id", food.id);
 
@@ -79,7 +82,7 @@ function displayFoods(foods) {
         var txtGroup = $("<p />").text("Group: ");
         var txtDateTime = $("<p />").text("DateTime: ");
         var txtType = $("<p />").text("Meal Type: ");
-        var txtNote = $("<p />").text(food.note).hide();
+        var txtNote = $("<p />").attr('name', 'note').text(food.note).hide();
         var txtReporter = $("<p />").text("Reporter: ");
 
         txtName.append($("<span />").attr("name", "name").text(food.name));
@@ -190,51 +193,33 @@ function updateFood() {
 
     validateFood(food, function (errMsg) {
         if (errMsg === "") {
-            foodHandler.checkDuplicate(food, function (result) {
-                if (result.rows.length !== 0) {
-                    alert("Event duplicated!");
-                } else {
-                    foodHandler.update(food, function () {
-                        changePage("#index");
-                    });
-                }
+            foodHandler.update(food, function () {
+                changePage("#index");
             });
-        } else {
-            alert(errMsg);
         }
     });
 }
 
-function displayReports(reports) {
-    var listReports = $("#list-reports");
-    listReports.empty();
+function displayNote() {
+    var listNote = $("#list-note");
+    listNote.empty();
 
-    for (var i = 0; i < reports.length; i++) {
-        var report = reports[i];
-        var li = $("<li data-icon='false' />");
-        var a = $("<a />").attr("id", report.aid);
-        var content = $("<p />").text(report.content);
+    var li = $("<li data-icon='false' />");
+    var content = $("<p />").text(currentFood.note);
 
-        a.append(content);
-        li.append(a);
-        listReports.append(li);
-    }
+    li.append(content);
+    listNote.append(li);
 
-    listReports.listview("refresh");
+    listNote.listview("refresh");
 }
 
-function addReport() {
+function addNote() {
     var txtContent = $("#txtContent");
 
-    reportHandler.add(
-        {
-            aid: currentActivity.id,
-            content: txtContent.val(),
-        },
-        function () {
-            changePage("#index");
-        }
-    )
+    currentFood.note = txtContent.val();
+    foodHandler.update(currentFood, function () {
+        changePage('#index')
+    });
 }
 
 function validateFood(food, callback) {

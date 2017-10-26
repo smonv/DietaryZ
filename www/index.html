@@ -37,6 +37,7 @@
     <div data-role="header" data-position="fixed">
         <a href="#index-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
         <h1>DietaryZ</h1>
+        <a href="#index" class="ui-btn ui-btn-right ui-btn-icon-plus">Add food</a>
     </div>
     <div data-role="main" class="ui-content">
         <form class="ui-filterable">
@@ -51,9 +52,9 @@
             </div>
             <div data-role="main" class="ui-content">
                 <a class="ui-btn ui-icon-delete ui-btn-icon-left ui-btn-inline" onclick="deleteFood()">Delete</a>
-                <a class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-inline" data-rel="dialog" href="#update-food">Update</a>
-                <a class="ui-btn ui-icon-info ui-btn-icon-left" data-rel="dialog" href="#reports">View report</a>
-                <a class="ui-btn ui-icon-plus ui-btn-icon-left" data-rel="dialog" href="#add-report">Add report</a>
+                <a class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-inline" href="#update-food">Update</a>
+                <a class="ui-btn ui-icon-info ui-btn-icon-left" href="#note">View note</a>
+                <a class="ui-btn ui-icon-plus ui-btn-icon-left" href="#add-note">Add note</a>
             </div>
         </div>
     </div>
@@ -68,8 +69,9 @@
         </ul>
     </div>
     <div data-role="header" data-position="fixed">
-        <a href="#add-food-menu" class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"></a>
+        <a href="#" data-rel="back">Back</a>
         <h1>Add food</h1>
+        <a href="" class="ui-btn ui-icon-plus ui-btn-icon-left ui-btn-right" id="btnAdd" onclick="addFood()">Add</a>
     </div>
     <div data-role="main" class="ui-content">
         <form id="add-activity-form">
@@ -92,15 +94,16 @@
                 <textarea id="txtNote" rows="4"></textarea>
                 <label for="txtReporter">Reporter: </label>
                 <input type="text" id="txtReporter" data-clear-btn="true"/>
-                <label for="btnAdd"></label>
-                <a href="" class="ui-btn ui-icon-plus ui-btn-icon-left" id="btnAdd" onclick="addFood()">Add</a>
             </div>
         </form>
     </div>
 </div>
-<div data-role="dialog" data-dialog="true" id="update-food">
+<div data-role="page" id="update-food">
     <div data-role="header">
+        <a href="#" data-rel="back">Back</a>
         <h1>Update Food</h1>
+        <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-right" id="btnUpdate"
+           onclick="updateFood()">Update</a>
     </div>
     <div data-role="main" class="ui-content">
         <form id="update-food-form">
@@ -123,36 +126,34 @@
                 <textarea id="txtNoteUpdate" rows="4"></textarea>
                 <label for="txtReporterUpdate">Reporter: </label>
                 <input type="text" id="txtReporterUpdate" data-clear-btn="true"/>
-                <label for="btnUpdate"></label>
-                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnUpdate"
-                   onclick="updateFood()">Update</a>
             </div>
         </form>
     </div>
 </div>
 
-<div data-role="dialog" data-dialog="true" id="add-report">
+<div data-role="page" id="add-note" data-add-back-btn="true">
     <div data-role="header">
-        <h1>Add report</h1>
+        <a href="#" data-rel="back">Back</a>
+        <h1>Add note</h1>
+        <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left ui-btn-right" id="btnAddReport" onclick="addNote()">Add</a>
     </div>
     <div data-role="main" class="ui-content">
         <form>
             <div class="ui-field-contain">
                 <label for="txtContent">Content</label>
-                <textarea id="txtContent" data-clear-btn="true"></textarea>
-                <label for="btnAddReport"></label>
-                <a href="" class="ui-btn ui-icon-edit ui-btn-icon-left" id="btnAddReport" onclick="addReport()">Add</a>
+                <textarea id="txtContent" data-clear-btn="true" rows="10"></textarea>
             </div>
         </form>
     </div>
 </div>
 
-<div data-role="dialog" data-dialog="true" id="reports">
+<div data-role="page" id="note">
     <div data-role="header">
-        <h1>Reports</h1>
+        <a href="#" data-rel="back">Back</a>
+        <h1>Note</h1>
     </div>
     <div data-role="main" class="ui-content">
-        <ul data-role="listview" id="list-reports">
+        <ul data-role="listview" id="list-note">
 
         </ul>
     </div>
